@@ -1,0 +1,16 @@
+{
+    "red_slug":{
+        "maxhp": 30,
+        "speed": 30,
+        "damage": 5,
+        "xp_drop": 5,
+        "credit_drop": [5, 10]
+    },
+    "blue_slug":{
+        "maxhp": 50,
+        "speed": 40,
+        "damage": 10,
+        "xp_drop": 7,
+        "credit_drop": [8, 12]
+    }
+}

@@ -1,0 +1,112 @@
+extends Node2D
+
+var network = NetworkedMultiplayerENet.new()
+var port = 1909
+var max_players = 250
+
+var expected_tokens = []
+var player_state_collection = {}
+
+onready var player_verification_process = get_node("player_verification")
+
+func _ready():
+	start_server()
+	
+func start_server():
+	network.create_server(port, max_players)
+	get_tree().set_network_peer(network)
+	network.connect("peer_connected", self, "_player_connected")
+	network.connect("peer_disconnected", self, "_player_disconnected")
+	
+	print("server started")
+
+func _player_connected(player_id):
+	print("player " + str(player_id) + " connected")
+	player_verification_process.start(player_id)
+	
+func _player_disconnected(player_id):
+	print("player " + str(player_id) + " disconnected")
+	if has_node(str(player_id)):
+		get_node(str(player_id)).queue_free()
+		get_node("world_map/players/" + str(player_id)).queue_free()
+		player_state_collection.erase(player_id)
+		rpc_id(0, "despawn_player", player_id)
+	
+func _on_token_expiration_timeout():
+	var current_time = OS.get_unix_time()
+	var token_time
+	if expected_tokens == []:
+		pass
+	else:
+		for i in range(expected_tokens.size() -1, -1 ,-1):
+			token_time = int(expected_tokens[i].right(64))
+			if current_time - token_time >= 30:
+				expected_tokens.remove(i)
+				
+remote func fetch_server_time(client_time):
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(player_id, "return_server_time", OS.get_system_time_msecs(), client_time)
+
+remote func determine_latency(client_time):
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(player_id, "return_latency", client_time)
+
+func fetch_token(player_id):
+	rpc_id(player_id, "fetch_token")
+	
+remote func return_token(token):
+	var player_id = get_tree().get_rpc_sender_id()
+	player_verification_process.verify(player_id, token)
+	
+func return_token_verification_results(player_id, result):
+	rpc_id(player_id, "return_token_verification_results", result)
+	if result == true:
+		rpc_id(0, "spawn_new_player", player_id, Vector2(0, 0))
+		
+remote func recieve_player_state(player_state):
+	var player_id = get_tree().get_rpc_sender_id()
+	if player_state_collection.has(player_id):
+		if player_state_collection[player_id]["t"] < player_state["t"]:
+			player_state_collection[player_id] = player_state
+			get_node("world_map/players/" + str(player_id)).set_position(player_state["p"])
+	else:
+		player_state_collection[player_id] = player_state
+
+#remote func recieve_pickup_state(pickup_state, pickup_id):
+#	if get_node("state_processing").world_state["pickups"].has(int(pickup_id)):
+#		if OS.get_unix_time() < pickup_state["t"]:
+#			get_node("state_processing").world_state["pickups"][int(pickup_id)]["pickup_position"] = pickup_state["p"]
+
+func send_world_state(world_state):
+	rpc_unreliable_id(0, "recieve_world_state", world_state)
+	
+remote func attack(positon, rotation_deg, rotation, spawn_time):
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(0, "recieve_attack", position, rotation_deg, rotation, spawn_time, player_id)
+
+remote func send_npc_hit(enemy_id, damage):
+	get_node("map").npc_hit(enemy_id, damage)
+
+remote func fetch_playerdata(playeruser):
+	var player_id = get_tree().get_rpc_sender_id()
+	get_node(str(player_id)).playeruser = playeruser
+	var playerdata
+	var create = true
+	for user in serverdata.playerdata:
+		if user == playeruser:
+			playerdata = serverdata.playerdata[playeruser]
+			create = false
+			#print("loaded data" + str(serverdata.playerdata[playeruser]) + " for " + str(player_id) + ", user: " + str(playeruser))
+	if create == true:
+		playerdata = serverdata.default_data
+		serverdata.write_playerdata(playeruser, player_id)
+		print("created player data entry for " + str(player_id) + ", user: " + str(playeruser))
+	rpc_id(player_id, "return_playerdata", playerdata)
+
+remote func write_playerdata_update(playeruser, newdata):
+	var player_id = get_tree().get_rpc_sender_id()
+	serverdata.write_playerdata_update(playeruser, player_id, newdata)
+	
+remote func fetch_itemdata():
+	var player_id = get_tree().get_rpc_sender_id()
+	rpc_id(player_id, "return_itemdata", serverdata.itemdata)

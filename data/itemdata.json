@@ -1,0 +1,14 @@
+{
+    "life_berry": {
+        "type": "food",
+        "stacksize": 99,
+        "description": "Regenerates 20 HP",
+        "hprestore": 20
+    },
+    "medkit": {
+        "type": "food",
+        "stacksize": 99,
+        "description": "Regenerates 100 HP",
+        "hprestore": 100
+    }
+}
