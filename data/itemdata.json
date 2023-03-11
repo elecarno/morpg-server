@@ -14,12 +14,32 @@
     "travellers_shortsword": {
         "type": "weapon",
         "stacksize": 1,
-        "description": "A trusty (if a bit short) sword.",
+        "description": "A trusty (if a bit short) weapon.",
         "damage": 7
     },
     "blue_tunic": {
         "type": "armour",
         "stacksize": 1,
         "description": "A simple blue garment"
+    },
+    "purple_tunic": {
+        "type": "armour",
+        "stacksize": 1,
+        "description": "A simple purple garment"
+    },
+    "green_tunic": {
+        "type": "armour",
+        "stacksize": 1,
+        "description": "A simple green garment"
+    },
+    "yellow_tunic": {
+        "type": "armour",
+        "stacksize": 1,
+        "description": "A simple yellow garment"
+    },
+    "red_tunic": {
+        "type": "armour",
+        "stacksize": 1,
+        "description": "A simple red garment"
     }
 }
