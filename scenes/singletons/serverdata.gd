@@ -28,6 +28,10 @@ var default_data = {
 	"inv": {
 		0: ["life_berry", 25],
 		1: ["medkit", 3]
+	},
+	"equips": { # 0 - weapon, 1 - armour, 2 - hat
+		0: ["travellers_shortsword", 1],
+		1: ["blue_tunic", 1]
 	}
 }
 

@@ -10,5 +10,16 @@
         "stacksize": 99,
         "description": "Regenerates 100 HP",
         "hprestore": 100
+    },
+    "travellers_shortsword": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A trusty (if a bit short) sword.",
+        "damage": 7
+    },
+    "blue_tunic": {
+        "type": "armour",
+        "stacksize": 1,
+        "description": "A simple blue garment"
     }
 }
