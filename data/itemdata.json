@@ -15,7 +15,64 @@
         "type": "weapon",
         "stacksize": 1,
         "description": "A trusty (if a bit short) weapon.",
-        "damage": 7
+        "damage": 7,
+        "speed": 250
+    },
+    "gold_shortsword": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A trusty (if a bit short) weapon.",
+        "damage": 15,
+        "speed": 300
+    },
+    "platinum_shortsword": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A trusty (if a bit short) weapon.",
+        "damage": 32,
+        "speed": 400
+    },
+    "jade_shortsword": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A trusty (if a bit short) weapon.",
+        "damage": 60,
+        "speed": 500
+    },
+    "ruby_shortsword": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A trusty (if a bit short) weapon.",
+        "damage": 100,
+        "speed": 600
+    },
+    "steel_saber": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A swift and piercing weapon",
+        "damage": 12,
+        "speed": 350
+    },
+    "gold_saber": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A swift and piercing weapon",
+        "damage": 25,
+        "speed": 450
+    },
+    "platinum_saber": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A swift and piercing weapon",
+        "damage": 45,
+        "speed": 550
+    },
+    "jade_saber": {
+        "type": "weapon",
+        "stacksize": 1,
+        "description": "A swift and piercing weapon",
+        "damage": 80,
+        "speed": 650
     },
     "blue_tunic": {
         "type": "armour",
